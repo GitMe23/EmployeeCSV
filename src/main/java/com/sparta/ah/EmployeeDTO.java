@@ -1,6 +1,8 @@
 package com.sparta.ah;
 
 public class EmployeeDTO {
+
+
     // DTO - Data Transfer Object
     private String empId;
     private String namePrefix;
@@ -62,8 +64,11 @@ public class EmployeeDTO {
     }
 
 
+    public String getEmpId() {
+        return empId;
+    }
 
-
-
-
+    public void setEmpId(String empId) {
+        this.empId = empId;
+    }
 }

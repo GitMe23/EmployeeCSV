@@ -11,9 +11,21 @@ public class EmployeeDTO {
     private String lastName;
     private String gender;
     private String email;
+
     private String dob; //private LocalDate dob;
     private String dateOfJoining;
     private String salary;
+
+
+
+
+    public String getDob() {
+        return dob;
+    }
+
+
+
+
 
     public EmployeeDTO(String empId, String namePrefix,
                        String firstName, String middleInitial,
@@ -70,5 +82,14 @@ public class EmployeeDTO {
 
     public void setEmpId(String empId) {
         this.empId = empId;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+
+    public void formatDob() {
+        this.dob = "0" + this.getDob();
     }
 }

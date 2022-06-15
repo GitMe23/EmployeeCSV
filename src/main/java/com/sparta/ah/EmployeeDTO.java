@@ -6,6 +6,35 @@ public class EmployeeDTO {
     // DTO - Data Transfer Object
     private String empId;
     private String namePrefix;
+
+    public String getNamePrefix() {
+        return namePrefix;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getMiddleInitial() {
+        return middleInitial;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getDateOfJoining() {
+        return dateOfJoining;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
     private String firstName;
     private String middleInitial;
     private String lastName;
@@ -22,7 +51,6 @@ public class EmployeeDTO {
     public String getDob() {
         return dob;
     }
-
 
 
 
@@ -88,8 +116,4 @@ public class EmployeeDTO {
         return gender;
     }
 
-
-    public void formatDob() {
-        this.dob = "0" + this.getDob();
-    }
 }

@@ -10,8 +10,8 @@ public class CustomFormatter extends Formatter {
 
     @Override
     public String format(LogRecord record) {
-        return getDateFormat()
-                + " " + record.getLevel()
+        return //getDateFormat() +  " " +
+                record.getLevel()
                 + " " + record.getMessage() + "\n";
 
     }

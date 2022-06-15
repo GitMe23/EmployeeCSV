@@ -1,15 +1,14 @@
 package com.sparta.ah;
 
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
+
+import com.sparta.ah.jdbc.*;
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.logging.Level;
 
-import com.sparta.ah.logging.*;
 
 import static com.sparta.ah.logging.LogConfig.logger;
 
@@ -18,6 +17,8 @@ public class EmployeeCollection {
     private static ArrayList<EmployeeDTO> employees = new ArrayList<>();
 
     private static HashSet<EmployeeDTO> cleanSet = new HashSet<>();
+
+
 
     public static ArrayList<EmployeeDTO> getDirtyList() {
         return dirtyList;
@@ -28,6 +29,18 @@ public class EmployeeCollection {
 
     public static ArrayList<EmployeeDTO> getEmployees() {
         return employees;
+    }
+
+    public static void setEmployees(ArrayList<EmployeeDTO> employees) {
+        EmployeeCollection.employees = employees;
+    }
+
+    public static void addToDirtyList(EmployeeDTO employee) {
+        dirtyList.add(employee);
+    }
+
+    public static int getSize() {
+        return employees.size();
     }
 
     public static void checkForDuplicateIDs() {
@@ -45,20 +58,6 @@ public class EmployeeCollection {
         // change to log:
         logger.log(Level.INFO, allEmployeesCount + " records checked, " + dirtyCount + " moved to dirty data list.");
     }
-
-
-    public static void setEmployees(ArrayList<EmployeeDTO> employees) {
-        EmployeeCollection.employees = employees;
-    }
-
-    public static void addToDirtyList(EmployeeDTO employee) {
-        dirtyList.add(employee);
-    }
-
-    public static int getSize() {
-        return employees.size();
-    }
-
     public static void checkGenderTypes() {
         int allEmployeesCount = 0;
         int dirtyCount = 0;
@@ -71,27 +70,51 @@ public class EmployeeCollection {
         }
         logger.log(Level.INFO, allEmployeesCount + " records checked, " + dirtyCount + " moved to dirty data list.");
     }
-            //
-            // methods for interacting with employees
-            // EmployeeCollection.addToCollection()
-
-
-
 
     public static void checkDates() {
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-//        LocalDate today = LocalDate.now();
-//        String formattedString = today.format(dtf);
+        int allEmployeesCount = 0;
+        int dirtyCount = 0;
+        LocalDate thisYear = LocalDate.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy");
+        int thisYearInt = Integer.parseInt(thisYear.format(dtf));
+        for (EmployeeDTO employee : employees) {
 
-//        for (EmployeeDTO employee : employees) {
-//            if (employee.getDob().length() < 10 ) {
-//                employee.formatDob();
-//            }
-//            LocalDate dob = LocalDate.parse(employee.getDob(), dtf);
-//            if (dob.isAfter(today)) {
-//                addToDirtyList(employee);
-//            }
-//        }
-        //logger.log(Level.INFO, allEmployeesCount + " records checked, " + dirtyCount + " moved to dirty data list.");
+            int dobYear = Integer.parseInt(employee.getDob().substring(employee.getDob().length() - 4));
+            if (dobYear > thisYearInt) {
+                addToDirtyList(employee);
+                dirtyCount++;
+            }
+            allEmployeesCount++;
+        }
+        logger.log(Level.INFO, allEmployeesCount + " records checked, " + dirtyCount + " moved to dirty data list.");
+    }
+
+    public static EmployeeDTO[] getCleanArray() {
+        for (EmployeeDTO employee : employees) {
+            if (!dirtyList.contains(employee)) {
+                cleanSet.add(employee);
+            }
+        }
+         return cleanSet.toArray(new EmployeeDTO[0]);
+    }
+
+    public static void sendToDb(EmployeeDTO[] cleanArray) {
+        EmployeeDAO employeeDAO = new EmployeeDAO(ConnectionManager.getConnection());
+
+        for (EmployeeDTO employee : cleanArray) {
+            employeeDAO.insertEmployee(
+                            employee.getEmpId(),
+                            employee.getNamePrefix(),
+                            employee.getFirstName(),
+                            employee.getMiddleInitial(),
+                            employee.getLastName(),
+                            employee.getGender(),
+                            employee.getEmail(),
+                            employee.getDob(),
+                            employee.getDateOfJoining(),
+                            employee.getSalary());
+
+        }
     }
 }
+

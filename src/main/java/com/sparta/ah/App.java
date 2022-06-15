@@ -1,5 +1,9 @@
 package com.sparta.ah;
 
+import java.util.logging.Level;
+
+import static com.sparta.ah.logging.LogConfig.logger;
+
 /**
  * Create ArrayList of Employees objects
  * Filter out clean, corrupted objects
@@ -27,8 +31,7 @@ public class App
         EmployeeCollection.sendToDb(toDB);
         stop = System.nanoTime();
         long time = stop - start;
-        System.out.println( (time / 1_000_000) / 1000 + " seconds");
-
+        logger.log(Level.INFO, "Time taken: " + (time / 1_000_000_000) + " seconds");
 
     }
     // 1. loop - one big array of Employees  (for each, remove corrupted) Easy / takes longer

@@ -25,11 +25,11 @@ public class FileIO {
             for (String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
                 String[] args = line.split(",");
                 arrayToSort.add(new EmployeeDTO(args));
-                lineCount++;            }
+                            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        logger.log(Level.INFO, "Lines: " + lineCount);
+        logger.log(Level.INFO, "Finished reading " + filename);
     return arrayToSort;
 
     }

@@ -18,7 +18,7 @@ public class EmployeeCollection {
 
     private static HashSet<EmployeeDTO> cleanSet = new HashSet<>();
 
-
+    private static HashSet<EmployeeDTO> checkSet = new HashSet<>();
 
     public static ArrayList<EmployeeDTO> getDirtyList() {
         return dirtyList;
@@ -33,6 +33,7 @@ public class EmployeeCollection {
 
     public static void setEmployees(ArrayList<EmployeeDTO> employees) {
         EmployeeCollection.employees = employees;
+        logger.log(Level.INFO, "Updated employee ArrayList in EmployeeCollection");
     }
 
     public static void addToDirtyList(EmployeeDTO employee) {
@@ -44,36 +45,27 @@ public class EmployeeCollection {
     }
 
     public static void checkForDuplicateIDs() {
-        int allEmployeesCount = 0;
-        int dirtyCount = 0;
+        logger.log(Level.INFO, "checking for duplicate ids..........");
         for (EmployeeDTO employee : employees) {
-            allEmployeesCount++;
-            for (EmployeeDTO emp : employees) {
-                if (employee != emp && employee.getEmpId().equals(emp.getEmpId())) {
-                    dirtyCount++;
-                    addToDirtyList(employee);
-                }
+            if (!checkSet.add(employee)) {
+                addToDirtyList(employee);
             }
         }
         // change to log:
-        logger.log(Level.INFO, allEmployeesCount + " records checked, " + dirtyCount + " moved to dirty data list.");
+        logger.log(Level.INFO, "Duplicate ID check done");
     }
     public static void checkGenderTypes() {
-        int allEmployeesCount = 0;
-        int dirtyCount = 0;
+        logger.log(Level.INFO, "checking gender formats..........");
         for (EmployeeDTO employee : employees) {
-            allEmployeesCount++;
             if (!employee.getGender().equals("M") && !employee.getGender().equals("F")) {
                 addToDirtyList(employee);
-                dirtyCount++;
             }
         }
-        logger.log(Level.INFO, allEmployeesCount + " records checked, " + dirtyCount + " moved to dirty data list.");
+        logger.log(Level.INFO, "Gender type check done");
     }
 
     public static void checkDates() {
-        int allEmployeesCount = 0;
-        int dirtyCount = 0;
+        logger.log(Level.INFO, "checking DOB formats..........");
         LocalDate thisYear = LocalDate.now();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy");
         int thisYearInt = Integer.parseInt(thisYear.format(dtf));
@@ -82,25 +74,26 @@ public class EmployeeCollection {
             int dobYear = Integer.parseInt(employee.getDob().substring(employee.getDob().length() - 4));
             if (dobYear > thisYearInt) {
                 addToDirtyList(employee);
-                dirtyCount++;
             }
-            allEmployeesCount++;
         }
-        logger.log(Level.INFO, allEmployeesCount + " records checked, " + dirtyCount + " moved to dirty data list.");
+        logger.log(Level.INFO, "DOB format check done");
     }
 
     public static EmployeeDTO[] getCleanArray() {
+        logger.log(Level.INFO, "Checking if records are in dirty data list....");
         for (EmployeeDTO employee : employees) {
             if (!dirtyList.contains(employee)) {
                 cleanSet.add(employee);
             }
         }
-         return cleanSet.toArray(new EmployeeDTO[0]);
+        EmployeeDTO[] cleanArray = cleanSet.toArray(new EmployeeDTO[0]);
+        logger.log(Level.INFO, cleanArray.length + " clean records");
+        return cleanArray;
     }
 
     public static void sendToDb(EmployeeDTO[] cleanArray) {
         EmployeeDAO employeeDAO = new EmployeeDAO(ConnectionManager.getConnection());
-
+        logger.log(Level.INFO, "Sending clean records to DB..................");
         for (EmployeeDTO employee : cleanArray) {
             employeeDAO.insertEmployee(
                             employee.getEmpId(),
@@ -115,6 +108,8 @@ public class EmployeeCollection {
                             employee.getSalary());
 
         }
+        logger.log(Level.INFO, "Clean data sent to database");
     }
+
 }
 

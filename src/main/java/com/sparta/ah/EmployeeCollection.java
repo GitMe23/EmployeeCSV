@@ -18,7 +18,7 @@ public class EmployeeCollection {
 
     private static HashSet<EmployeeDTO> cleanSet = new HashSet<>();
 
-    private static HashSet<EmployeeDTO> checkSet = new HashSet<>();
+    private static HashSet<String> checkSet = new HashSet<>();
 
     public static ArrayList<EmployeeDTO> getDirtyList() {
         return dirtyList;
@@ -47,7 +47,8 @@ public class EmployeeCollection {
     public static void checkForDuplicateIDs() {
         logger.log(Level.INFO, "checking for duplicate ids..........");
         for (EmployeeDTO employee : employees) {
-            if (!checkSet.add(employee)) {
+
+            if (!checkSet.add(employee.getEmpId())) {
                 addToDirtyList(employee);
             }
         }

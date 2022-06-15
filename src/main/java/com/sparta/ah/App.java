@@ -22,16 +22,16 @@ public class App
 
         start = System.nanoTime();
         EmployeeCollection.setEmployees(FileIO.readFromFile(file));
-        EmployeeCollection.checkForDuplicateIDs();
+//        EmployeeCollection.checkForDuplicateIDs();
+
         EmployeeCollection.checkGenderTypes();
         EmployeeCollection.checkDates();
         EmployeeDTO[] toDB = EmployeeCollection.getCleanArray();
-
-
         EmployeeCollection.sendToDb(toDB);
         stop = System.nanoTime();
         long time = stop - start;
         logger.log(Level.INFO, "Time taken: " + (time / 1_000_000_000) + " seconds");
+        System.out.println("Size of dirty list: " + EmployeeCollection.getDirtyList().size());
 
     }
     // 1. loop - one big array of Employees  (for each, remove corrupted) Easy / takes longer

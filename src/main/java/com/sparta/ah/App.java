@@ -28,8 +28,6 @@ public class App
 
         EmployeeCollection.clearEmployeesFromDatabase();
 
-
-
         String fileToRead = "src/main/resources/EmployeeRecordsLarge.csv";
         String dirtyFilePath = "src/main/java/com/sparta/ah/DirtyData.csv";
 
@@ -39,9 +37,8 @@ public class App
         EmployeeCollection.checkGenderTypes();
         EmployeeCollection.checkDates();
         EmployeeCollection.writeDirtyData(dirtyFilePath);
-        ThreadManager.sendCleanSetToDb();
+        ThreadManager.sendCleanSetToDbTwoThreads();
 
-        logger.log(Level.WARNING, "Size of dirty list: " + EmployeeCollection.getDirtyList().size());
 
 
 

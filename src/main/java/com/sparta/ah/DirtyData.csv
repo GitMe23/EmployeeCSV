@@ -1,5 +1,1 @@
 Emp ID,Name Prefix,First Name,Middle Initial,Last Name,Gender,E Mail,Date of Birth,Date of Joining,Salary
-EmployeeDTO{empId='15', namePrefix='Ms.', firstName='Rhoda', middleInitial='J', lastName='Scalzo', gender='F', email='rhoda.scalzo@earthlink.net', dob='05/05/1982', dateOfJoining='3/31/2008', salary='126203'}
-EmployeeDTO{empId='10', namePrefix='Mrs.', firstName='Ivette', middleInitial='F', lastName='Manzanares', gender='x', email='ivette.manzanares@gmail.com', dob='7/26/1993', dateOfJoining='7/26/2014', salary='189834'}
-EmployeeDTO{empId='11', namePrefix='Dr.', firstName='Kelley', middleInitial='X', lastName='Cypert', gender='x', email='kelley.cypert@aol.com', dob='12/19/1985', dateOfJoining='5/22/2017', salary='132786'}
-EmployeeDTO{empId='12', namePrefix='Hon.', firstName='Brian', middleInitial='A', lastName='Harms', gender='M', email='brian.harms@shell.com', dob='12/19/5989', dateOfJoining='3/29/2013', salary='44235'}

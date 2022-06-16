@@ -3,6 +3,7 @@ package com.sparta.ah;
 import com.sparta.ah.jdbc.ConnectionManager;
 import com.sparta.ah.jdbc.EmployeeDAO;
 
+import java.util.Date;
 import java.util.logging.Level;
 
 import static com.sparta.ah.logging.LogConfig.logger;
@@ -15,35 +16,49 @@ import static com.sparta.ah.logging.LogConfig.logger;
 public class App 
 {
 
-    public static void main( String[] args )
-    {
+
+
+
+    static long start;
+
+
+
+    public static void main( String[] args )  {
 
 
         EmployeeCollection.clearEmployeesFromDatabase();
 
-        long start;
-        long stop;
 
-        String fileToRead = "src/main/resources/EmployeeRecords.csv";
+
+        String fileToRead = "src/main/resources/EmployeeRecordsLarge.csv";
         String dirtyFilePath = "src/main/java/com/sparta/ah/DirtyData.csv";
 
-        start = System.nanoTime();
+        setStart(System.currentTimeMillis());
         EmployeeCollection.setEmployees(FileIO.readFromFile(fileToRead));
         EmployeeCollection.checkForDuplicateIDs();
         EmployeeCollection.checkGenderTypes();
         EmployeeCollection.checkDates();
-        ThreadManager.sendCleanSetToDb();
         EmployeeCollection.writeDirtyData(dirtyFilePath);
+        ThreadManager.sendCleanSetToDb();
 
-        stop = System.nanoTime();
-        long time = stop - start;
         logger.log(Level.WARNING, "Size of dirty list: " + EmployeeCollection.getDirtyList().size());
-        logger.log(Level.INFO, "Time taken: " + (time / 1_000_000_000) + " seconds");
+
 
 
     }
+
+    private static void setStart(long currentTimeMillis) {
+        start = currentTimeMillis;
+    }
     // 1. loop - one big array of Employees  (for each, remove corrupted) Easy / takes longer
     // 2. while in loop, filter and add to clean array   Harder / faster
+
+
+    public static long getStart() {
+        return start;
+    }
+
+
 
 
 }

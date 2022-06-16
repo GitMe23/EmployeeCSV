@@ -23,14 +23,15 @@ public class ThreadManager implements Runnable {
     @Override
     public void run() {
         logger.log(Level.INFO, Thread.currentThread().getName() + " sending records to database");
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         sendArrayToDb(employeeArray);
-    }
+        long stopTime = System.currentTimeMillis();
+        logger.log(Level.INFO, Thread.currentThread().getName() + " finished.");
 
+
+        long totalTime = stopTime - App.getStart();
+
+        logger.log(Level.INFO, "Total run time: " + totalTime + " milliseconds");
+    }
 
     public static void sendCleanSetToDb() {
         EmployeeDTO[] cleanArray = EmployeeCollection.getCleanArray();
@@ -42,15 +43,12 @@ public class ThreadManager implements Runnable {
         ThreadManager tm2 = new ThreadManager(array2);
         Thread thread1 = new Thread(tm1);
         Thread thread2 = new Thread(tm2);
-
+        thread1.setName("Thread 1");
+        thread2.setName("Thread 2");
         thread1.start();
         thread2.start();
 
     }
-
-
-
-
 
     public static void sendArrayToDb(EmployeeDTO[] cleanArray) {
         EmployeeDAO employeeDAO = new EmployeeDAO(ConnectionManager.getConnection());

@@ -67,4 +67,14 @@ public class EmployeeDAO {
       }
 
    }
+
+   public void clearDatabase() {
+      try {
+         PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.DELETE_FROM);
+         preparedStatement.executeQuery();
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+   }
+
 }

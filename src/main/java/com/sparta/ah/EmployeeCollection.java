@@ -16,6 +16,8 @@ public class EmployeeCollection {
 
     private static ArrayList<EmployeeDTO> employees = new ArrayList<>();
 
+
+
     private static HashSet<EmployeeDTO> cleanSet = new HashSet<>();
 
     private static HashSet<String> checkSet = new HashSet<>();
@@ -46,27 +48,35 @@ public class EmployeeCollection {
 
     public static void checkForDuplicateIDs() {
         logger.log(Level.INFO, "checking for duplicate ids..........");
+        int dirtyCount = 0;
         for (EmployeeDTO employee : employees) {
 
             if (!checkSet.add(employee.getEmpId())) {
+                dirtyCount++;
                 addToDirtyList(employee);
+
             }
         }
-        // change to log:
+        logger.log(Level.WARNING, dirtyCount + " records added to dirty data list");
         logger.log(Level.INFO, "Duplicate ID check done");
     }
     public static void checkGenderTypes() {
         logger.log(Level.INFO, "checking gender formats..........");
+        int dirtyCount = 0;
         for (EmployeeDTO employee : employees) {
             if (!employee.getGender().equals("M") && !employee.getGender().equals("F")) {
+                dirtyCount++;
                 addToDirtyList(employee);
+
             }
         }
+        logger.log(Level.WARNING, dirtyCount + " records added to dirty data list");
         logger.log(Level.INFO, "Gender type check done");
     }
 
     public static void checkDates() {
         logger.log(Level.INFO, "checking DOB formats..........");
+        int dirtyCount = 0;
         LocalDate thisYear = LocalDate.now();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy");
         int thisYearInt = Integer.parseInt(thisYear.format(dtf));
@@ -74,9 +84,12 @@ public class EmployeeCollection {
 
             int dobYear = Integer.parseInt(employee.getDob().substring(employee.getDob().length() - 4));
             if (dobYear > thisYearInt) {
+                dirtyCount++;
                 addToDirtyList(employee);
+
             }
         }
+        logger.log(Level.WARNING, dirtyCount + " records added to dirty data list");
         logger.log(Level.INFO, "DOB format check done");
     }
 
@@ -92,25 +105,17 @@ public class EmployeeCollection {
         return cleanArray;
     }
 
-    public static void sendToDb(EmployeeDTO[] cleanArray) {
-        EmployeeDAO employeeDAO = new EmployeeDAO(ConnectionManager.getConnection());
-        logger.log(Level.INFO, "Sending clean records to DB..................");
-        for (EmployeeDTO employee : cleanArray) {
-            employeeDAO.insertEmployee(
-                            employee.getEmpId(),
-                            employee.getNamePrefix(),
-                            employee.getFirstName(),
-                            employee.getMiddleInitial(),
-                            employee.getLastName(),
-                            employee.getGender(),
-                            employee.getEmail(),
-                            employee.getDob(),
-                            employee.getDateOfJoining(),
-                            employee.getSalary());
-
-        }
-        logger.log(Level.INFO, "Clean data sent to database");
+    public static void writeDirtyData(String filePath) {
+        DirtyListFileWriter dirtyListFileWriter = new DirtyListFileWriter(filePath);
+        dirtyListFileWriter.writeDirtyDataToFile(EmployeeCollection.getDirtyList());
+    }
+    public static HashSet<EmployeeDTO> getCleanSet() {
+        return cleanSet;
     }
 
+    public static void clearEmployeesFromDatabase() {
+        EmployeeDAO employeeDAO = new EmployeeDAO(ConnectionManager.getConnection());
+        employeeDAO.clearDatabase();
+    }
 }
 

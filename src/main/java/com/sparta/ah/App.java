@@ -1,5 +1,8 @@
 package com.sparta.ah;
 
+import com.sparta.ah.jdbc.ConnectionManager;
+import com.sparta.ah.jdbc.EmployeeDAO;
+
 import java.util.logging.Level;
 
 import static com.sparta.ah.logging.LogConfig.logger;
@@ -15,23 +18,28 @@ public class App
     public static void main( String[] args )
     {
 
+
+        EmployeeCollection.clearEmployeesFromDatabase();
+
         long start;
         long stop;
-        String file = "src/main/resources/EmployeeRecordsLarge.csv";
 
+        String fileToRead = "src/main/resources/EmployeeRecords.csv";
+        String dirtyFilePath = "src/main/java/com/sparta/ah/DirtyData.csv";
 
         start = System.nanoTime();
-        EmployeeCollection.setEmployees(FileIO.readFromFile(file));
-//        EmployeeCollection.checkForDuplicateIDs();
-
+        EmployeeCollection.setEmployees(FileIO.readFromFile(fileToRead));
+        EmployeeCollection.checkForDuplicateIDs();
         EmployeeCollection.checkGenderTypes();
         EmployeeCollection.checkDates();
-        EmployeeDTO[] toDB = EmployeeCollection.getCleanArray();
-        EmployeeCollection.sendToDb(toDB);
+        ThreadManager.sendCleanSetToDb();
+        EmployeeCollection.writeDirtyData(dirtyFilePath);
+
         stop = System.nanoTime();
         long time = stop - start;
+        logger.log(Level.WARNING, "Size of dirty list: " + EmployeeCollection.getDirtyList().size());
         logger.log(Level.INFO, "Time taken: " + (time / 1_000_000_000) + " seconds");
-        System.out.println("Size of dirty list: " + EmployeeCollection.getDirtyList().size());
+
 
     }
     // 1. loop - one big array of Employees  (for each, remove corrupted) Easy / takes longer

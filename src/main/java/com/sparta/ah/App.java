@@ -28,7 +28,7 @@ public class App
 
         EmployeeCollection.clearEmployeesFromDatabase();
 
-        String fileToRead = "src/main/resources/EmployeeRecords100k.csv";
+        String fileToRead = "src/main/resources/EmployeeRecordsLarge.csv";
         String dirtyFilePath = "src/main/java/com/sparta/ah/DirtyData.csv";
 
         setStart(System.currentTimeMillis());

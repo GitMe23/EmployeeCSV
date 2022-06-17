@@ -1,5 +1,6 @@
-package com.sparta.ah;
-
+import com.sparta.ah.EmployeeCollection;
+import com.sparta.ah.EmployeeDTO;
+import com.sparta.ah.FileIO;
 import com.sparta.ah.jdbc.ConnectionManager;
 
 import org.junit.Test;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  */
 public class AppTest
 {
-    String file = "src/test/java/com/sparta/ah/TestFile.csv";
+    String file = "src/test/TestFile.csv";
 
     @Test
     public void checkDuplicateIDs() {
@@ -51,18 +52,19 @@ public class AppTest
     }
     @Test
     public void checkIfSmallFileIsRead() {
-        String file2 = "src/test/java/com/sparta/ah/TestFileToFilter.csv";
+        String file2 = "src/test/TestFileToFilter.csv";
 
         EmployeeCollection.setEmployees(FileIO.readFromFile(file2));
         Assertions.assertEquals(30, EmployeeCollection.getEmployees().size());
     }
     @Test
     public void checkIfLargeFileIsRead() {
-        String file3 = "src/test/java/com/sparta/ah/EmployeeRecordsLarge.csv";
+        String file3 = "src/test/EmployeeRecordsLarge.csv";
 
         EmployeeCollection.setEmployees(FileIO.readFromFile(file3));
         Assertions.assertEquals(65499, EmployeeCollection.getEmployees().size());
     }
+
 
 
 

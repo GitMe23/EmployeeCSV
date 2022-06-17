@@ -11,8 +11,7 @@ import static com.sparta.ah.logging.LogConfig.logger;
 
 public class FileIO {
 
-    // offset count for col headers:
-    static int lineCount = 0;
+
     public static ArrayList<EmployeeDTO> readFromFile(String filename) {
         logger.log(Level.INFO,"Reading from "  + filename + "...");
         ArrayList<EmployeeDTO> arrayToSort = new ArrayList<>();

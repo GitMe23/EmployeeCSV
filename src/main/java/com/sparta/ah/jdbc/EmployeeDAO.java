@@ -77,15 +77,16 @@ public class EmployeeDAO {
       }
    }
 
-   public void printCount()  {
+   public String printCount()  {
       try {
          ResultSet resultSet = statement.executeQuery(SQLQueries.COUNT_ALL);
          while (resultSet.next()) {
-            System.out.println(resultSet.getString(1));
+            return resultSet.getString(1);
          }
       } catch (SQLException e) {
          throw new RuntimeException(e);
       }
+      return null;
    }
 
 }

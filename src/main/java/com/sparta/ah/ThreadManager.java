@@ -22,17 +22,15 @@ public class ThreadManager implements Runnable {
 
     @Override
     public void run() {
-        logger.log(Level.INFO, Thread.currentThread().getName() + " sending records to database");
         sendArrayToDb(employeeArray);
         long stopTime = System.currentTimeMillis();
         logger.log(Level.INFO, Thread.currentThread().getName() + " finished.");
 
 
         long totalTime = stopTime - App.getStart();
-        logger.log(Level.INFO, "---------------------------------------------" );logger.log(Level.INFO, "---------------------------------------------" );logger.log(Level.INFO, "---------------------------------------------" );
-        logger.log(Level.INFO, "---------------------------------------------" );
+
         logger.log(Level.INFO, " ------ " + totalTime + " milliseconds  -----" );
-        logger.log(Level.INFO, "Time run time: " + totalTime/1000 + " seconds -  " + EmployeeCollection.getCleanSet().size() + " employee records sent to database. " + EmployeeCollection.getDirtyList().size() + " added to dirty list.");
+        logger.log(Level.INFO, " " + EmployeeCollection.getCleanSet().size() + " employee records sent to database. " + EmployeeCollection.getDirtyList().size() + " added to dirty list.");
 
     }
 

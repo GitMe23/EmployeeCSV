@@ -32,7 +32,7 @@ public class ThreadManager implements Runnable {
         logger.log(Level.INFO, "---------------------------------------------" );logger.log(Level.INFO, "---------------------------------------------" );logger.log(Level.INFO, "---------------------------------------------" );
         logger.log(Level.INFO, "---------------------------------------------" );
         logger.log(Level.INFO, " ------ " + totalTime + " milliseconds  -----" );
-        logger.log(Level.INFO, "Time run time: " + totalTime/1000 + " seconds -  " + EmployeeCollection.getCleanSet().size() + " employee records sent to database ");
+        logger.log(Level.INFO, "Time run time: " + totalTime/1000 + " seconds -  " + EmployeeCollection.getCleanSet().size() + " employee records sent to database. " + EmployeeCollection.getDirtyList().size() + " added to dirty list.");
 
     }
 

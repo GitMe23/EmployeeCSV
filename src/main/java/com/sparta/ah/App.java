@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import static com.sparta.ah.logging.LogConfig.logger;
 
 /**
- * Create ArrayList of Employees objects
+ * Create Array of Employees objects
  * Filter out clean, corrupted objects
  *
  */
@@ -28,7 +28,7 @@ public class App
 
         EmployeeCollection.clearEmployeesFromDatabase();
 
-        String fileToRead = "src/main/resources/EmployeeRecordsLarge.csv";
+        String fileToRead = "src/main/resources/EmployeeRecords100k.csv";
         String dirtyFilePath = "src/main/java/com/sparta/ah/DirtyData.csv";
 
         setStart(System.currentTimeMillis());
@@ -37,10 +37,7 @@ public class App
         EmployeeCollection.checkGenderTypes();
         EmployeeCollection.checkDates();
         EmployeeCollection.writeDirtyData(dirtyFilePath);
-        ThreadManager.sendCleanSetToDbTwoThreads();
-
-
-
+        ThreadManager.sendCleanSetToDbEightThreads();
 
     }
 
